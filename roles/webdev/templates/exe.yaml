@@ -1,0 +1,6 @@
+---
+  - name: test a jinja 
+    hosts: all
+    template:
+     src: '/root/hosts'     
+     dest: /root/done'

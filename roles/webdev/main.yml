@@ -1,0 +1,22 @@
+---
+  - name: ex294 QUESTION
+    hosts: all
+   
+
+    tasks:
+      - name: create directory
+        file:
+         path: /webdev
+         state: directory
+
+      - name: create user
+        user:
+          name: phull
+          state: present
+
+      - name: create softlink
+        file:
+          src: /webdev
+          path: /var/www/html/wev
+          state: link
+          mode: 2755

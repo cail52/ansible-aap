@@ -1,0 +1,8 @@
+---
+  - name: dislay hostname
+    hosts: localhost
+    become: true
+    tasks:
+      - name: show hostname facts
+        debug:
+         msg: "the hostname is {{ ansible_hostname }} with ip  {{ansible_default_ipv4.address}}. Disk partitions are {{ansible_devices.sda}}"

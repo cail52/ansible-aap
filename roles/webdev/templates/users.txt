@@ -1,0 +1,9 @@
+---
+  - name: quetion
+    hosts: all
+
+    vars:
+         user-list:
+         usr-passwd: 
+
+

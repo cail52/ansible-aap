@@ -1,0 +1,17 @@
+---
+ - name: create users
+   hosts: all
+   gather_facts: false
+   vars: 
+     users:
+       - phil
+       - don
+       - martin
+       - paul
+   tasks:
+    - name: sigh
+      user:
+        name: "{{ item }}"
+        password: "{{ 'Password'| password_hash('sha512') }}"
+        state: present
+      loop: "{{  users }}"

@@ -1,0 +1,43 @@
+---
+  - name:  volume playbook
+    hosts: anslab
+
+    tasks:
+# tasks file for partitions
+      - name: create a 2gb partion
+        parted:
+          device: /dev/sdb
+          number: 1
+          flags: [ lvm ]
+          state: present 
+          part_end: 2GiB
+
+      - name: create volume group
+        lvg:
+          vg: examvg
+          pvs: /dev/sdb1  
+        when: ansible_devices.sdb.partitions.sdb1 is defined
+ 
+      - name: create the logical volume
+        lvol:
+          vg: examvg
+          lv: examlv
+          size: 1500m
+#        when: ansible_lvm.vgs.examvg is defined and ((ansible_lvm.vgs.examvg.size_g|float) >1.5)
+      - name: send alert message
+        debug:
+          msg: "not enough space"
+        when: ansible_lvm.vgs.examvg is defined and ((ansible_lvm.vgs.examvg.size_g|float) <1.5)
+ 
+      - name: create smaller logical volume
+        lvol:
+          vg: examvg
+          lv: examlv
+          size: 800m
+        when: ansible_lvm.vgs.examvg is defined and ((ansible_lvm.vgs.examvg.size_g|float) <1.5)
+
+      - name: create filesystem 
+        filesystem:
+          dev: /dev/examvg/examlv
+#          fstype: xfs
+        when: ansible_lvm.vgs.examvg is defined

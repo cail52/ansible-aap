@@ -1,0 +1,17 @@
+---
+  - name: create users
+    hosts: localhost
+    become: yes
+    vars:
+      users:
+       - phil
+       - don
+       - martin
+       - paul
+
+    tasks:
+     - name: create users from vars
+       user:
+         name: "{{ item }}"
+         state: absent
+       loop: "{{users}}"
